@@ -17,19 +17,17 @@ const step1 = (raw) => {
 };
 
 const step2 = (step1) => (key) => {
-    let a = [];
-    let b = [];
+    const a = [];
+    const b = [];
     step1.forEach(row => {
-        let startIndex = row.length;
-        row.forEach((group, index) => {
+        const startIndex = row.findIndex(group => {
             const [first, second] = group;
-            if (first === key) {
-                startIndex = index;
-                return false;
-            }
+            return (first === key);
         });
-        const del = row.length - startIndex;
-        b.push(...row.splice(startIndex, del));
+        if (startIndex >= 0) {
+            const del = row.length - startIndex;
+            b.push(...row.splice(startIndex, del));
+        }
         a.push(...row);
     });
     return {a, b};
@@ -49,5 +47,5 @@ const step3 = (step2) => {
 const result = step3(step2(step1(raw))(3))
     .map(group => `(${group.toString()})`)
     .join(' ');
-    
+
 console.log(result);
